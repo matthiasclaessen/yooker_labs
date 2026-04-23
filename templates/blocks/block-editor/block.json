@@ -1,0 +1,17 @@
+{
+  "name": "acf/block-editor",
+  "title": "Block Editor",
+  "description": "An Editor block.",
+  "category": "brightbyte-blocks",
+  "icon": "edit",
+  "supports": {
+    "align": false,
+    "mode": false,
+    "customClassName": false,
+    "anchor": true
+  },
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "block-editor.php"
+  }
+}

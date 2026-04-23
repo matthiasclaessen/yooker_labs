@@ -1,0 +1,17 @@
+{
+  "name": "acf/block-hero",
+  "title": "Block Hero",
+  "description": "A hero block.",
+  "category": "brightbyte-blocks",
+  "icon": "align-full-width",
+  "supports": {
+    "align": false,
+    "mode": false,
+    "customClassName": false,
+    "anchor": true
+  },
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "block-hero.php"
+  }
+}

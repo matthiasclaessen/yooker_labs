@@ -1,0 +1,340 @@
+{
+    "key": "group_pc_builder_product_fields",
+    "title": "PC Builder — Product Fields",
+    "fields": [
+        {
+            "key": "field_component_type",
+            "label": "Component Type",
+            "name": "component_type",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Select the type of PC component. This drives the builder step logic and compatibility checks.",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "cpu": "Processor (CPU)",
+                "motherboard": "Motherboard",
+                "ram": "Memory (RAM)",
+                "gpu": "Graphics Card (GPU)",
+                "storage": "Storage",
+                "psu": "Power Supply (PSU)",
+                "case": "Case",
+                "cooling": "Cooling"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "— Select component type —",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_socket_type",
+            "label": "Socket Type",
+            "name": "socket_type",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "CPU socket. Must match between CPU and Motherboard for compatibility.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "cpu"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "motherboard"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "LGA1700": "Intel LGA1700 (12th \/ 13th \/ 14th Gen)",
+                "LGA1200": "Intel LGA1200 (10th \/ 11th Gen)",
+                "AM5": "AMD AM5 (Ryzen 7000 \/ 8000 \/ 9000)",
+                "AM4": "AMD AM4 (Ryzen 1000 – 5000)"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "— Select socket —",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_tdp_watts",
+            "label": "TDP (Watts)",
+            "name": "tdp_watts",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "For CPUs and GPUs: their heat output. For coolers: the maximum TDP they can handle.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "cpu"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "gpu"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "cooling"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 0,
+            "max": 1000,
+            "step": 1,
+            "prepend": "",
+            "append": "W",
+            "placeholder": "e.g. 125"
+        },
+        {
+            "key": "field_ram_type",
+            "label": "RAM Generation",
+            "name": "ram_type",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "RAM kit generation. Must match the Motherboard's Supported RAM field.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "ram"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "DDR5": "DDR5",
+                "DDR4": "DDR4",
+                "DDR3": "DDR3"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "— Select DDR generation —",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_supported_ram",
+            "label": "Supported RAM",
+            "name": "supported_ram",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Which DDR generation this motherboard accepts. Must match RAM kit's RAM Generation.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "motherboard"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "DDR5": "DDR5 only",
+                "DDR4": "DDR4 only",
+                "DDR4\/DDR5": "DDR4 or DDR5 (dual socket)"
+            },
+            "default_value": false,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 1,
+            "ui": 1,
+            "ajax": 0,
+            "placeholder": "— Select supported RAM —",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_psu_wattage",
+            "label": "PSU Wattage",
+            "name": "psu_wattage",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Total wattage output of this power supply. The builder checks CPU TDP + GPU TDP × 1.2 against this.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_component_type",
+                        "operator": "==",
+                        "value": "psu"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "min": 0,
+            "max": 2000,
+            "step": 50,
+            "prepend": "",
+            "append": "W",
+            "placeholder": "e.g. 850"
+        },
+        {
+            "key": "field_product_specifications",
+            "label": "Specifications",
+            "name": "product_specifications",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Key \/ value specification rows displayed in the product's Specifications tab.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "button_label": "Add specification row",
+            "min": 0,
+            "max": 20,
+            "rows_per_page": 20,
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_spec_label",
+                    "label": "Label",
+                    "name": "label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "e.g. Cores",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_product_specifications"
+                },
+                {
+                    "key": "field_spec_value",
+                    "label": "Value",
+                    "name": "value",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "60",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "e.g. 24 (8P + 16E)",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_product_specifications"
+                }
+            ]
+        },
+        {
+            "key": "field_compatibility_tags",
+            "label": "Compatibility Tags",
+            "name": "compatibility_tags",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Optional comma-separated tags for future custom compatibility rules (e.g. 'Intel-platform, gaming').",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "e.g. Intel-platform, high-end, DDR5",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "product"
+            }
+        ]
+    ],
+    "menu_order": 10,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Custom fields for the PC Builder — component type, socket, TDP, RAM generation, PSU wattage and specifications.",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "modified": 1776859517
+}

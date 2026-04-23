@@ -1,0 +1,972 @@
+// ==========================================================================
+// WooCommerce Cart
+// ==========================================================================
+
+// Design tokens
+// --------------------------------------------------------------------------
+
+$color-primary: #3E61FC;
+$color-primary-hover: #2E4FE8;
+$color-primary-soft: rgba(62, 97, 252, 0.08);
+
+$color-text: #566070;
+$color-text-strong: #1F2937;
+$color-text-muted: #8A94A6;
+
+$color-border: #E5E8EF;
+$color-border-strong: #D1D6E0;
+$color-surface: #FFFFFF;
+$color-surface-alt: #F7F8FB;
+
+$color-danger: #DC2626;
+
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 14px;
+
+$space-xs: 0.5rem;
+$space-sm: 0.75rem;
+$space-md: 1rem;
+$space-lg: 1.5rem;
+$space-xl: 2rem;
+
+$font-size-sm: 0.875rem;
+$font-size-base: 0.9375rem;
+$font-size-md: 1rem;
+$font-size-lg: 1.125rem;
+
+$transition: 150ms ease;
+
+$breakpoint-md: 768px;
+
+// Grid columns: remove | thumb | name | price | qty | subtotal
+$cart-grid-columns: 40px 88px minmax(0, 1fr) 110px 140px 120px;
+
+
+.b-cart {
+  padding: 2rem 0;
+}
+
+// Cart form
+// --------------------------------------------------------------------------
+
+.woocommerce-cart-form {
+  color: $color-text;
+  font-size: $font-size-base;
+  line-height: 1.5;
+
+  &__contents {
+    background: $color-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    overflow: hidden;
+  }
+
+  // Header row
+  &__header {
+    display: grid;
+    grid-template-columns: $cart-grid-columns;
+    align-items: center;
+    gap: $space-md;
+    padding: $space-md $space-lg;
+    background: $color-surface-alt;
+    border-bottom: 1px solid $color-border;
+
+    font-size: $font-size-sm;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: $color-text-muted;
+
+    @media (max-width: $breakpoint-md) {
+      display: none;
+    }
+  }
+
+  &__header-cell {
+    &--price,
+    &--subtotal {
+      text-align: right;
+    }
+
+    &--quantity {
+      text-align: center;
+    }
+  }
+
+  // Body
+  &__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Cart item row
+  &__cart-item {
+    display: grid;
+    grid-template-columns: $cart-grid-columns;
+    align-items: center;
+    gap: $space-md;
+    padding: $space-lg;
+    border-bottom: 1px solid $color-border;
+    transition: background-color $transition;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: $color-surface-alt;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      grid-template-columns: 80px 1fr auto;
+      grid-template-areas:
+        "thumb  name    remove"
+        "thumb  price   price"
+        "qty    qty     subtotal";
+      row-gap: $space-sm;
+      padding: $space-md;
+    }
+  }
+
+  &__cart-item-cell {
+    min-width: 0;
+
+    &--remove {
+      @media (max-width: $breakpoint-md) {
+        grid-area: remove;
+        justify-self: end;
+      }
+    }
+
+    &--thumbnail {
+      @media (max-width: $breakpoint-md) {
+        grid-area: thumb;
+      }
+
+      img {
+        display: block;
+        width: 72px;
+        height: 72px;
+        object-fit: cover;
+        border-radius: $radius-md;
+        background: $color-surface-alt;
+      }
+
+      a {
+        display: inline-block;
+        line-height: 0;
+      }
+    }
+
+    &--name {
+      @media (max-width: $breakpoint-md) {
+        grid-area: name;
+      }
+
+      a {
+        color: $color-text-strong;
+        font-weight: 600;
+        font-size: $font-size-md;
+        text-decoration: none;
+        transition: color $transition;
+
+        &:hover {
+          color: $color-primary;
+        }
+      }
+
+      .backorder_notification {
+        margin: $space-xs 0 0;
+        font-size: $font-size-sm;
+        color: $color-text-muted;
+      }
+    }
+
+    &--price {
+      text-align: right;
+      color: $color-text;
+
+      @media (max-width: $breakpoint-md) {
+        grid-area: price;
+        text-align: left;
+      }
+    }
+
+    &--quantity {
+      text-align: center;
+
+      @media (max-width: $breakpoint-md) {
+        grid-area: qty;
+        text-align: left;
+      }
+    }
+
+    &--subtotal {
+      text-align: right;
+      font-weight: 600;
+      color: $color-text-strong;
+
+      @media (max-width: $breakpoint-md) {
+        grid-area: subtotal;
+        text-align: right;
+      }
+    }
+
+    // Mobile labels using data-title
+    @media (max-width: $breakpoint-md) {
+      &[data-title]::before {
+        content: attr(data-title);
+        display: block;
+        margin-bottom: 2px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: $color-text-muted;
+      }
+
+      // Suppress label on visual-only cells
+      &--remove::before,
+      &--thumbnail::before,
+      &--name::before {
+        display: none !important;
+      }
+    }
+  }
+
+  // Remove button
+  .remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: transparent;
+    color: $color-text-muted;
+    font-size: 1.25rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: background-color $transition, color $transition;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba($color-danger, 0.08);
+      color: $color-danger;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-danger;
+      outline-offset: 2px;
+    }
+  }
+
+  // Quantity input
+  .quantity {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid $color-border-strong;
+    border-radius: $radius-sm;
+    overflow: hidden;
+    background: $color-surface;
+    transition: border-color $transition, box-shadow $transition;
+
+    &:focus-within {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 3px $color-primary-soft;
+    }
+
+    input[type="number"] {
+      width: 56px;
+      height: 36px;
+      padding: 0 $space-xs;
+      border: none;
+      background: transparent;
+      color: $color-text-strong;
+      font-size: $font-size-base;
+      text-align: center;
+      -moz-appearance: textfield;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  // Actions row
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-md;
+    padding: $space-lg;
+    background: $color-surface-alt;
+    border-top: 1px solid $color-border;
+  }
+
+  // Coupon block
+  .coupon {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $space-xs;
+
+    label {
+      // Already screen-reader-only via WC class
+    }
+
+    .input-text {
+      height: 40px;
+      padding: 0 $space-md;
+      border: 1px solid $color-border-strong;
+      border-radius: $radius-sm;
+      background: $color-surface;
+      color: $color-text-strong;
+      font-size: $font-size-base;
+      transition: border-color $transition, box-shadow $transition;
+
+      &::placeholder {
+        color: $color-text-muted;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px $color-primary-soft;
+      }
+    }
+  }
+
+  // Buttons
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 $space-lg;
+    border: 1px solid transparent;
+    border-radius: $radius-sm;
+    background: $color-primary;
+    color: #FFFFFF;
+    font-size: $font-size-base;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color $transition, border-color $transition, transform $transition;
+
+    &:hover {
+      background: $color-primary-hover;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px $color-primary-soft;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+
+    // Secondary variant for "Apply coupon" (first button in actions)
+    &[name="apply_coupon"] {
+      background: $color-surface;
+      border-color: $color-border-strong;
+      color: $color-text-strong;
+
+      &:hover {
+        border-color: $color-primary;
+        color: $color-primary;
+        background: $color-surface;
+      }
+    }
+  }
+}
+
+
+// Screen reader only helper (in case the theme doesn't provide it)
+// --------------------------------------------------------------------------
+
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ==========================================================================
+// WooCommerce Cart Collaterals
+// ==========================================================================
+// Assumes design tokens from cart styles are available
+// (same file or imported partial).
+
+// Layout
+// --------------------------------------------------------------------------
+
+// Page layout — form left, collaterals right
+// --------------------------------------------------------------------------
+
+.b-cart__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-xl;
+
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+    align-items: start;
+  }
+}
+
+.b-cart__main {
+  min-width: 0; // prevent grid blowout from long product names
+}
+
+.b-cart__aside {
+  @media (min-width: $breakpoint-md) {
+    position: sticky;
+    top: $space-lg;
+  }
+}
+
+
+.cart-collaterals {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+}
+
+
+// Cart totals
+// --------------------------------------------------------------------------
+
+.cart_totals {
+  padding: $space-lg;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $radius-lg;
+
+  @media (min-width: $breakpoint-md) {
+    order: 2;
+    position: sticky;
+    top: $space-lg;
+  }
+
+  h2 {
+    margin: 0 0 $space-md;
+    padding-bottom: $space-md;
+    border-bottom: 1px solid $color-border;
+    color: $color-text-strong;
+    font-size: $font-size-lg;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .shop_table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $font-size-base;
+
+    th,
+    td {
+      padding: $space-sm 0;
+      border: none;
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 500;
+      color: $color-text;
+      text-align: left;
+    }
+
+    td {
+      color: $color-text-strong;
+      text-align: right;
+    }
+
+    // Regular rows (subtotal, shipping, etc.)
+    .cart-subtotal,
+    .shipping,
+    .fee,
+    .tax-rate,
+    .cart-discount {
+      border-bottom: 1px solid $color-border;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    // Order total — the hero row
+    .order-total {
+      th,
+      td {
+        padding-top: $space-md;
+        padding-bottom: $space-sm;
+        border-top: 1px solid $color-border;
+      }
+
+      th {
+        color: $color-text-strong;
+        font-size: $font-size-md;
+        font-weight: 600;
+      }
+
+      td {
+        color: $color-text-strong;
+        font-size: $font-size-lg;
+        font-weight: 700;
+      }
+
+      .woocommerce-Price-amount {
+        color: $color-primary;
+      }
+
+      small.includes_tax {
+        display: block;
+        margin-top: 2px;
+        color: $color-text-muted;
+        font-size: $font-size-sm;
+        font-weight: 400;
+      }
+    }
+
+    // Discount amount styling
+    .cart-discount td {
+      color: $color-primary;
+    }
+  }
+
+  // Shipping calculator
+  .shipping-calculator-button {
+    display: inline-block;
+    margin-top: $space-xs;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color $transition;
+
+    &:hover,
+    &:focus-visible {
+      border-bottom-color: $color-primary;
+    }
+  }
+
+  .shipping-calculator-form {
+    margin-top: $space-md;
+    padding-top: $space-md;
+    border-top: 1px solid $color-border;
+
+    .form-row {
+      margin-bottom: $space-sm;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      height: 40px;
+      padding: 0 $space-md;
+      border: 1px solid $color-border-strong;
+      border-radius: $radius-sm;
+      background: $color-surface;
+      color: $color-text-strong;
+      font-size: $font-size-base;
+      transition: border-color $transition, box-shadow $transition;
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px $color-primary-soft;
+      }
+    }
+
+    .button {
+      width: 100%;
+      margin-top: $space-xs;
+    }
+  }
+
+  // Shipping method list
+  .woocommerce-shipping-methods {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: $space-xs;
+      padding: $space-xs 0;
+
+      input[type="radio"] {
+        accent-color: $color-primary;
+        margin: 0;
+      }
+
+      label {
+        color: $color-text;
+        font-size: $font-size-sm;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .woocommerce-shipping-destination {
+    margin-top: $space-xs;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+  }
+
+  // Proceed to checkout
+  .wc-proceed-to-checkout {
+    margin-top: $space-lg;
+    padding-top: $space-lg;
+    border-top: 1px solid $color-border;
+
+    .checkout-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 48px;
+      padding: 0 $space-lg;
+      border: none;
+      border-radius: $radius-sm;
+      background: $color-primary;
+      color: #FFFFFF;
+      font-size: $font-size-md;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: background-color $transition, transform $transition;
+
+      &:hover {
+        background: $color-primary-hover;
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px $color-primary-soft;
+      }
+
+      &:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+}
+
+
+// Cross-sells
+// --------------------------------------------------------------------------
+
+.cross-sells {
+  order: 2;
+
+  @media (min-width: $breakpoint-md) {
+    order: 1;
+  }
+
+  > h2 {
+    margin: 0 0 $space-lg;
+    color: $color-text-strong;
+    font-size: $font-size-lg;
+    font-weight: 600;
+  }
+
+  .products {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $space-md;
+
+    @media (min-width: 480px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    li.product {
+      display: flex;
+      flex-direction: column;
+      padding: $space-md;
+      background: $color-surface;
+      border: 1px solid $color-border;
+      border-radius: $radius-md;
+      transition: border-color $transition, transform $transition;
+
+      &:hover {
+        border-color: $color-border-strong;
+        transform: translateY(-2px);
+      }
+
+      > a {
+        display: flex;
+        flex-direction: column;
+        gap: $space-xs;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: $radius-sm;
+        background: $color-surface-alt;
+        margin-bottom: $space-xs;
+      }
+
+      .woocommerce-loop-product__title {
+        margin: 0;
+        color: $color-text-strong;
+        font-size: $font-size-base;
+        font-weight: 500;
+        line-height: 1.4;
+      }
+
+      .price {
+        display: block;
+        color: $color-primary;
+        font-size: $font-size-base;
+        font-weight: 600;
+
+        del {
+          color: $color-text-muted;
+          font-weight: 400;
+          margin-right: $space-xs;
+        }
+
+        ins {
+          background: transparent;
+          text-decoration: none;
+        }
+      }
+
+      // Add to cart button on cross-sell cards
+      .button,
+      .add_to_cart_button {
+        margin-top: $space-sm;
+        height: 36px;
+        padding: 0 $space-md;
+        border: 1px solid $color-border-strong;
+        border-radius: $radius-sm;
+        background: $color-surface;
+        color: $color-text-strong;
+        font-size: $font-size-sm;
+        font-weight: 500;
+        text-align: center;
+        text-decoration: none;
+        transition: border-color $transition, color $transition, background-color $transition;
+
+        &:hover {
+          border-color: $color-primary;
+          color: $color-primary;
+        }
+
+        &.added {
+          display: none;
+        }
+      }
+
+      .added_to_cart {
+        display: block;
+        margin-top: $space-xs;
+        color: $color-primary;
+        font-size: $font-size-sm;
+        text-align: center;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// ==========================================================================
+// WooCommerce Notices
+// ==========================================================================
+
+// Additional tokens for notice variants
+// --------------------------------------------------------------------------
+
+$color-success: #059669;
+$color-success-soft: rgba(5, 150, 105, 0.08);
+
+$color-info: $color-primary;
+$color-info-soft: $color-primary-soft;
+
+$color-danger-soft: rgba(220, 38, 38, 0.08);
+
+
+// Notices wrapper
+// --------------------------------------------------------------------------
+
+.woocommerce-notices-wrapper {
+  &:empty {
+    display: none;
+  }
+
+  // Stack multiple notices with consistent spacing
+  > * + * {
+    margin-top: $space-sm;
+  }
+}
+
+
+// Base notice
+// --------------------------------------------------------------------------
+
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-error {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $space-sm;
+  margin: 0 0 $space-md;
+  padding: $space-md $space-lg;
+  border: 1px solid transparent;
+  border-left-width: 3px;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  line-height: 1.5;
+
+  // Inline links inside notices
+  a {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity $transition;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
+  // "Undo?" / restore links — push to the right
+  .restore-item,
+  .button {
+    margin-left: auto;
+    padding: $space-xs $space-md;
+    border: 1px solid currentColor;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color $transition, color $transition;
+
+    &:hover {
+      background: currentColor;
+      opacity: 1;
+
+      // Reset text color when background becomes currentColor
+      color: $color-surface;
+    }
+  }
+
+  // WooCommerce error list (used when multiple errors)
+  ul.woocommerce-error,
+  &.woocommerce-error ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      padding: 2px 0;
+    }
+  }
+}
+
+
+// Success — "Item removed", "Coupon applied", etc.
+// --------------------------------------------------------------------------
+
+.woocommerce-message {
+  background: $color-success-soft;
+  border-color: $color-success;
+  color: $color-success;
+
+  // Keep descriptive text readable in the dominant text color
+  // while the accent stays on the left border and link.
+  color: $color-text-strong;
+  border-left-color: $color-success;
+
+  a {
+    color: $color-success;
+  }
+
+  .restore-item {
+    color: $color-success;
+    border-color: $color-success;
+
+    &:hover {
+      background: $color-success;
+      color: #FFFFFF;
+    }
+  }
+}
+
+
+// Info — shipping calculator prompts, generic messages
+// --------------------------------------------------------------------------
+
+.woocommerce-info {
+  background: $color-info-soft;
+  border-left-color: $color-info;
+  color: $color-text-strong;
+
+  a {
+    color: $color-info;
+  }
+
+  .button {
+    color: $color-info;
+    border-color: $color-info;
+
+    &:hover {
+      background: $color-info;
+      color: #FFFFFF;
+    }
+  }
+}
+
+
+// Error — validation failures, stock issues
+// --------------------------------------------------------------------------
+
+.woocommerce-error {
+  background: $color-danger-soft;
+  border-left-color: $color-danger;
+  color: $color-text-strong;
+
+  a {
+    color: $color-danger;
+  }
+
+  .button {
+    color: $color-danger;
+    border-color: $color-danger;
+
+    &:hover {
+      background: $color-danger;
+      color: #FFFFFF;
+    }
+  }
+}

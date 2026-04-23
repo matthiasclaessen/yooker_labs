@@ -1,0 +1,96 @@
+.c-woocommerce {
+  display: flex;
+  height: 100%;
+  background-color: #f9fafb;
+  padding: 2rem 0;
+
+  .products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+    list-style: none;
+
+    .product {
+      display: flex;
+      flex-direction: column;
+
+      a {
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          margin-bottom: 1rem;
+        }
+
+        .woocommerce-loop-product__title {
+          font-size: 1.25rem;
+          color: $text;
+          margin-bottom: .5rem;
+        }
+
+        .price {
+          display: block;
+          margin-bottom: .5rem;
+        }
+
+        .short-description {
+          font-size: .75rem;
+          display: block;
+          color: $text;
+          margin-bottom: .5rem;
+        }
+      }
+
+      .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.5rem;
+        background-color: $primary;
+        color: #ffffff;
+        padding: 0 1rem;
+        margin-top: auto;
+        border-radius: .5rem;
+      }
+    }
+  }
+
+  .woocommerce-pagination {
+    margin: 1rem 0;
+
+    .page-numbers {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      list-style: none;
+
+      span, a {
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        color: $text;
+        border: 2px solid $text;
+        border-radius: .25rem;
+
+        &.current {
+          font-weight: 600;
+          color: $primary;
+          border-color: $primary;
+        }
+      }
+
+    }
+
+
+  }
+}

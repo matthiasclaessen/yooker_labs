@@ -1,0 +1,17 @@
+{
+  "name": "acf/block-image-text",
+  "title": "Block Image Text",
+  "description": "An image block with text on the side.",
+  "category": "brightbyte-blocks",
+  "icon": "align-left",
+  "supports": {
+    "align": false,
+    "mode": false,
+    "customClassName": false,
+    "anchor": true
+  },
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "block-image-text.php"
+  }
+}

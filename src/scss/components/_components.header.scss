@@ -1,0 +1,123 @@
+.c-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f3f4f6;
+
+  // Logo
+  .c-logo {
+    display: flex;
+    align-items: center;
+    width: 10rem;
+
+    svg {
+      width: 10rem;
+    }
+  }
+
+  // Menu
+  ul {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-right: 1rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.current-menu-item {
+      position: relative;
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: -.25rem;
+        height: .125rem;
+        width: 100%;
+        background-color: $primary;
+      }
+    }
+  }
+
+  a {
+    font-weight: 500;
+    text-decoration: none;
+    color: $text;
+  }
+
+  .c-header__utils {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+  }
+
+  .c-header__icon-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: .5rem;
+    color: #1F271B;
+    text-decoration: none;
+    transition: color .2s ease, background-color .2s ease;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      color: $primary;
+      background-color: #edeef1;
+    }
+  }
+
+  .c-header__account--in {
+    color: $primary;
+  }
+
+  .c-header__cart-count {
+    position: absolute;
+    top: .125rem;
+    right: .125rem;
+    min-width: 1.125rem;
+    height: 1.125rem;
+    padding: 0 .25rem;
+    border-radius: 2rem;
+    background: $primary;
+    color: #ffffff;
+    font-size: .625rem;
+    font-weight: 700;
+    line-height: 1.125rem;
+    text-align: center;
+    pointer-events: none;
+    animation: cart-badge-pop .25s cubic-bezier(.34, 1.56, .64, 1);
+
+    &[data-count="0"] {
+      display: none;
+    }
+  }
+
+  @keyframes cart-badge-pop {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}

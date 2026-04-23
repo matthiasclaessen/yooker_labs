@@ -1,0 +1,17 @@
+{
+  "name": "acf/block-cta",
+  "title": "Block CTA",
+  "description": "A CTA block.",
+  "category": "brightbyte-blocks",
+  "icon": "megaphone",
+  "supports": {
+    "align": false,
+    "mode": false,
+    "customClassName": false,
+    "anchor": true
+  },
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "block-editor.php"
+  }
+}

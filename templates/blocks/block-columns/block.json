@@ -1,0 +1,17 @@
+{
+  "name": "acf/block-columns",
+  "title": "Block Columns",
+  "description": "A block that renders content in columns",
+  "category": "brightbyte-blocks",
+  "icon": "columns",
+  "supports": {
+    "align": false,
+    "mode": false,
+    "customClassName": false,
+    "anchor": true
+  },
+  "acf": {
+    "mode": "edit",
+    "renderTemplate": "block-columns.php"
+  }
+}
